@@ -1,0 +1,326 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome {{ user.username }}</h1>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard</title>
+    </head>
+    <body>
+        <h1>Welcome {{ user.username }}</h1>
+        <h2>Employee List</h2>
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Position</th>
+            </tr>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.first_name }}</td>
+                <td>{{ employee.last_name }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.phone_number }}</td>
+                <td>{{ employee.position }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <a href="{% url 'add_employee' %}">Add Employee</a>
+        <br>
+        <a href="{% url 'logout' %}">Logout</a>
+    </body>
+    </html>
+    
+    -->
+
+<!--
+    
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e60000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .actions a {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome {{ user.username }}</h1>
+
+        {% if messages %}
+        <div class="message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h2>Employee List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Position</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.first_name }}</td>
+                    <td>{{ employee.last_name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.phone_number }}</td>
+                    <td>{{ employee.position }}</td>
+                    <td>
+                        <a href="{% url 'delete_employee' employee.id %}">
+                            <button>Delete</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <a href="{% url 'add_employee' %}">Add Employee</a>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #003973;
+        color: white;
+      }
+
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      button {
+        padding: 6px 12px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #003973;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .actions {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .actions a {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+
+      .actions a:hover {
+        background-color: #0056b3;
+      }
+
+      .message {
+        color: green;
+        font-weight: bold;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome {{ user.username }}</h1>
+
+      {% if messages %}
+      <div class="message">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <h2>Employee List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Position</th>
+            <th>Joining Date</th>
+            <!-- Added Joining Date column -->
+            <th>Salary</th>
+            <!-- Added Salary column -->
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for employee in employees %}
+          <tr>
+            <td>{{ employee.first_name }}</td>
+            <td>{{ employee.last_name }}</td>
+            <td>{{ employee.email }}</td>
+            <td>{{ employee.phone_number }}</td>
+            <td>{{ employee.position }}</td>
+            <td>{{ employee.joining_date }}</td>
+            <!-- Display Joining Date -->
+            <td>{{ employee.salary }}</td>
+            <!-- Display Salary -->
+            <td>
+              <!-- Edit button -->
+              <a href="{% url 'edit_employee' employee.id %}">
+                <button style="background-color: blue">Edit</button>
+              </a>
+              <!-- Delete button -->
+              <a href="{% url 'delete_employee' employee.id %}">
+                <button>Delete</button>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="actions">
+        <a href="{% url 'add_employee' %}">Add Employee</a>
+      </div>
+
+      <div class="actions">
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+  </body>
+</html>
