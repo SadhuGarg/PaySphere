@@ -1,0 +1,68 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Add Salary Detail</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Employee field -->
+                <div class="form-group row mb-3">
+                    <label for="employee" class="col-sm-3 col-form-label">Employee</label>
+                    <div class="col-sm-9">
+                        {{ form.employee }}
+                    </div>
+                </div>
+                
+                <!-- Monthly Salary field -->
+                <div class="form-group row mb-3">
+                    <label for="monthlySalary" class="col-sm-3 col-form-label">Monthly Salary</label>
+                    <div class="col-sm-9">
+                        {{ form.monthlySalary }}
+                    </div>
+                </div>
+                
+                <!-- Annual Salary field -->
+                <div class="form-group row mb-3">
+                    <label for="annualSalary" class="col-sm-3 col-form-label">Annual Salary</label>
+                    <div class="col-sm-9">
+                        {{ form.annualSalary }}
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var employeeSelect = document.getElementById('id_employee');
+        var salaryInput = document.getElementById('id_salary');
+
+        // When employee is selected, fetch their monthly salary and update the salary field
+        employeeSelect.addEventListener('change', function() {
+            var employeeId = this.value;
+            
+            if (employeeId) {
+                // Send AJAX request to get the salary details
+                fetch('/get_salary_detail/' + employeeId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.monthlySalary) {
+                            salaryInput.value = data.monthlySalary;
+                        }
+                    });
+            }
+        });
+    });
+</script>
+{% endblock %}

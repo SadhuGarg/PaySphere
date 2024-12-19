@@ -1,0 +1,76 @@
+ {% extends 'emp_base.html' %}
+
+{% block main %}
+
+<!-- <div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom:2px red solid">Leave History</h5>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                      <th>Leave Type</th>
+                    <th>Requested Dates</th>
+                    <th>Approved Dates</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leaves %}
+                    <tr>
+                        <td>{{ leave.leaveType }}</td>
+                        <td>{{ leave.requestedStartDate }} to {{ leave.requestedEndDate }}</td>
+                        <td>
+                            {% if leave.startDate %}
+                                {{ leave.startDate }} to {{ leave.endDate }}
+                            {% else %}
+                                Not Approved
+                            {% endif %}
+                        </td>
+                        <td>{{ leave.status }}</td>
+                        <td>{{ leave.reason }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div> -->
+
+<div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom:2px red solid">Applied Leave History</h5>
+
+        <div class="container-fluid">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Days Requested</th>
+                        <th>Days Approved</th>
+                        <th>Status</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in applied_leaves %}
+                    <tr>
+                        <td>{{ leave.leaveType }}</td>
+                        <td>{{ leave.startDate }}</td>
+                        <td>{{ leave.endDate }}</td>
+                        <td>{{ leave.daysRequested }}</td>
+                        <td>{{ leave.daysApproved }}</td>
+                        <td>{{ leave.status }}</td>
+                        <td>{{ leave.reason }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
+

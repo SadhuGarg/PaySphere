@@ -1,0 +1,43 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Edit Employee Details</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="emp_code">Employee Code</label>
+                    <input type="text" class="form-control" id="emp_code" name="emp_code" value="{{ form.emp_code.value }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="emp_dept">Department</label>
+                    <input type="text" class="form-control" id="emp_dept" name="emp_dept" value="{{ form.emp_dept.value }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <input type="text" class="form-control" id="designation" name="designation" value="{{ form.designation.value }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact</label>
+                    <input type="text" class="form-control" id="contact" name="contact" value="{{ form.contact.value }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <input type="text" class="form-control" id="gender" name="gender" value="{{ form.gender.value }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="joining_date">Joining Date</label>
+                    <input type="date" class="form-control" id="joining_date" name="joining_date" value="{{ form.joining_date.value }}" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a href="{% url 'admin_home' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

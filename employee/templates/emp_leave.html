@@ -1,0 +1,74 @@
+{% extends 'emp_base.html' %}
+
+{% block main %}
+
+<div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom:2px red solid">Apply for Leave</h5>
+
+        <div class="container-fluid">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="leave_type">Leave Type</label>
+                            <select name="leave_type" class="form-control" required>
+                                <option value="" disabled selected>Select Leave Type</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Casual Leave">Casual Leave</option>
+                                <option value="Annual Leave">Annual Leave</option>
+                                <option value="Maternity Leave">Maternity Leave</option>
+                                <option value="Paternity Leave">Paternity Leave</option>
+                                <option value="Unpaid Leave">Unpaid Leave</option>
+                            </select>
+                            <!-- <input type="text" name="leave_type" class="form-control" required> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <input type="date" name="start_date" class="form-control" required>
+                        </div>
+                    </div>
+                    <!-- <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="end_date">End Date</label>
+                            <input type="date" name="end_date" class="form-control" required>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="form-row">
+                    <!-- <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <input type="date" name="start_date" class="form-control" required>
+                        </div>
+                    </div> -->
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="end_date">End Date</label>
+                            <input type="date" name="end_date" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="reason">Reason (optional)</label>
+                            <textarea name="reason" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" value="Apply" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

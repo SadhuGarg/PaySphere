@@ -1,0 +1,39 @@
+{% extends 'emp_base.html' %}
+
+{% block main %}
+
+<div class="container mt-4">
+    <h3 class="text-center font-weight-bold">{{ request.user.username }}'s Salary Details</h3>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr class="bg-success text-white">
+                <th>Month</th>
+                <th>Year</th>
+                <th>Monthly Salary</th>
+                <th>Total Leaves</th>
+                <th>Total Deductions</th>
+                <th>Final Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if salary_data %}
+                <tr>
+                    <td>{{ salary_data.month }}</td>
+                    <td>{{ salary_data.year }}</td>
+                    <td>{{ salary_data.monthly_salary|floatformat:2 }}</td>
+                    <td>{{ salary_data.total_leaves|floatformat:0 }}</td>
+                    <td>{{ salary_data.total_deduction|floatformat:2 }}</td>
+                    <td>{{ salary_data.final_salary|floatformat:2 }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No salary record found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}

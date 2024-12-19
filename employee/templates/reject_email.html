@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leave Rejected</title>
+</head>
+<body>
+    <p>Dear {{ user.first_name }},</p>
+    <p>We regret to inform you that your leave request from {{ leave.requestedStartDate }} to {{ leave.requestedEndDate }} has been rejected.</p>
+    <p>Reason: {{ leave.reason }}</p>
+    <p>Please contact HR for further assistance.</p>
+</body>
+</html>

@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-01lrqxbev^at8if=x$+i-_t2s1l%tsh6&9nfwl6l7c*s%4&xiy'
+SECRET_KEY = 'django-insecure-fkb%i!e4!=fa@6^%j!xm6p$dwgt8lwqz7q0=_9sq%0&zp0a_xo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,20 +31,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'employee',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'employee',
-]
+    'django_apscheduler',
+    'django_extensions',
 
-AUTHENTICATION_BACKENDS=[
-    'django.contrib.auth.backends.ModelBackend'
-]
 
-LOGIN_URL = '/employee/login/' 
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,18 +52,32 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
+
+
+# APScheduler database storage (if needed for persistent jobs)
+SCHEDULER_CONFIG = {
+    'apscheduler.executors.default': {
+        'class': 'apscheduler.executors.pool:ThreadPoolExecutor',
+        'max_workers': 10,
+    },
+    'apscheduler.jobstores.default': {
+        'class': 'apscheduler.jobstores.django:DjangoJobStore',
+    },
+    'apscheduler.job_defaults.coalesce': False,
+    'apscheduler.job_defaults.max_instances': 1,
+}
 
 ROOT_URLCONF = 'paysphere.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': True,  # Set to True for development
+
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -120,6 +132,49 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    
+
+# EMAIL_HOST='smtp.gmail.com'
+# EMAIL_PORT=587
+# EMAIL_HOST_USER = '77rohangarg@gmail.com'
+# EMAIL_HOST_PASSWORD = 'fnqi svpl yeyt ijjb'
+# EMAIL_USE_TLS = True
+
+
+# Email Configuration in settings.py
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = '77rohangarg@gmail.com'  # Sending email # Replace with your email
+# EMAIL_HOST_PASSWORD = 'uerg yutn vsav cmmo'  # Replace with your email password
+# DEFAULT_FROM_EMAIL = 'sadhugarg14@gmail.com'  
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Gmail's SMTP server
+EMAIL_PORT = 587  # SMTP port for Gmail
+EMAIL_USE_TLS = True  # Use TLS encryption for secure email sending
+EMAIL_HOST_USER = '77rohangarg@gmail.com'  # Your Gmail email address
+EMAIL_HOST_PASSWORD = 'uerg yutn vsav cmmo'  # Your Gmail password (consider using an app password)
+DEFAULT_FROM_EMAIL = '77rohangarg@gmail.com'  # The email that will appear as the sender
+
+
+
+
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Replace with your Redis setup
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # or your broker URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # or your result backend URL
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'  # or your timezone
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

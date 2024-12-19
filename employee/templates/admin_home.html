@@ -1,0 +1,49 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Employee Management</h3>
+        </div>
+        <div class="card-body">
+            <h4 class="text-center mb-4">List of All Employees</h4>
+            <!-- Employee Table -->
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Employee Code</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Contact</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.emp_code }}</td>
+                        <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td>
+                        <td>{{ employee.gender }}</td>
+                        <td>{{ employee.contact }}</td>
+                        <td>{{ employee.emp_dept }}</td>
+                        <td>{{ employee.designation }}</td>
+                        <td>
+                            <a href="{% url 'edit_employee' employee.employee_id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'delete_employee' employee.employee_id %}" onclick="return confirm('Are you sure?')">Delete</a>
+                            <a href="{% url 'admin_emp_salary' employee.employee_id %}" class="btn btn-info btn-sm">Salary</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No employees found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

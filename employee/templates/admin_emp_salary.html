@@ -1,0 +1,78 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Generate Salary for {{ employee.user.first_name }} {{ employee.user.last_name }}</h3>
+        </div>
+        <div class="card-body">
+            <h4 class="text-center mb-4">Generate Salary for Employee</h4>
+            <form method="post" id="salaryForm" action="{% url 'generate_salary' employee.employee_id %}" style="display:inline;">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="paymentDate" class="form-label">Payment Date</label>
+                    <input type="date" id="paymentDate" name="paymentDate" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="deductions" class="form-label">Deductions</label>
+                    <input type="text" id="deductions" name="deductions" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="calculatedSalary" class="form-label">Final Salary</label>
+                    <input type="text" id="calculatedSalary" name="calculatedSalary" class="form-control" readonly>
+                </div>
+                <button type="submit" class="btn btn-success">Generate Salary</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const paymentDateField = document.getElementById('paymentDate');
+        const calculatedSalaryField = document.getElementById('calculatedSalary');
+        const deductionsField = document.getElementById('deductions');
+        const salaryForm = document.getElementById('salaryForm');
+
+        paymentDateField.addEventListener('change', function () {
+            const selectedDate = this.value;
+            if (selectedDate) {
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                // Fetch deductions and updated salary based on selected date
+                fetch(`/api/calculate-salary/{{ employee.employee_id }}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ payment_date: selectedDate })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        deductionsField.value = '';
+                        calculatedSalaryField.value = '';
+                    } else {
+                        deductionsField.value = data.deductions;
+                        calculatedSalaryField.value = data.final_salary;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while calculating salary. Please try again.');
+                });
+            }
+        });
+
+        salaryForm.addEventListener('submit', function (event) {
+            if (!calculatedSalaryField.value || !deductionsField.value) {
+                event.preventDefault();
+                alert('Please select a payment date to calculate salary before submitting.');
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'emp_base.html' %}
+
+{% block main %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Employee Dashboard</h1>
+
+    <div class="row g-4">
+        <!-- Row 1, Column 1: Employee Information -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4 class="card-title">Welcome, {{ employee.user.username|default:"User" }}</h4>
+                    <p><strong>Department:</strong> {{ employee.emp_dept|default:"Not Provided" }}</p>
+                    <p><strong>Designation:</strong> {{ employee.designation|default:"Not Provided" }}</p>
+                    <p><strong>Contact:</strong> {{ employee.contact|default:"Not Provided" }}</p>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Row 1, Column 2: Pie Chart -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Leave Summary</h4>
+                    <div class="chart-container" style="max-width: 300px; margin: auto;">
+                        <canvas id="leaveChart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-4">
+        <!-- Row 2, Column 1: Current Leaves -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4 class="card-title">Your Current Leaves</h4>
+                    {% if current_leaves %}
+                        <table class="table table-sm table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for leave in current_leaves %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ leave.leaveType }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if leave.status == 'Approved' %}bg-success
+                                            {% elif leave.status == 'Pending' %}bg-warning text-dark
+                                            {% else %}bg-danger{% endif %}">
+                                            {{ leave.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted">No leave records available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2, Column 2: Additional Information -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4 class="card-title">Additional Info</h4>
+                    <p>Here you can add more information like:</p>
+                    <ul>
+                        <li>Upcoming holidays</li>
+                        <li>Recent announcements</li>
+                        <li>Performance updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Get data from the context
+    const leaveData = {
+        labels: {{ leave_data.labels|safe }},
+        datasets: [{
+            data: {{ leave_data.data|safe }},
+            backgroundColor: [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+            ],
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: leaveData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Leave Types Distribution'
+                }
+            }
+        }
+    };
+
+    // Render the chart
+    const leaveChart = new Chart(
+        document.getElementById('leaveChart'),
+        config
+    );
+</script>
+{% endblock %}

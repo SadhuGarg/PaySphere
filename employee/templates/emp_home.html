@@ -1,0 +1,62 @@
+{% extends 'emp_base.html' %}
+
+{% block main %}
+<!-- <h4 class="text-danger p-2" style="border-bottom:2px solid red">Employee Dashboard</h4>
+
+<div class="row text-center">
+    <div class="col-sm-12 p-2">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4>Welcome to</h4>
+                <!-- <h5 style="text-transform: capitalize;">{{ request.user.first_name }} {{ request.user.last_name }}</h5> -->
+                <!-- <h5 style="text-transform: capitalize;">{{ request.user }} </h5>
+            </div>
+        </div>
+    </div>
+</div> --> 
+
+
+<div>
+    <h1>Welcome, {{ employee.user.first_name }}</h1>
+    <p>Department: {{ employee.department }}</p>
+    <p>Designation: {{ employee.designation }}</p>
+    <p>Contact: {{ employee.contact }}</p>
+</div>
+
+<div>
+    <h2>Your Current Leaves</h2>
+    {% if applied_leaves %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Leave Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in applied_leaves %}
+                    <tr>
+                        <td>{{ leave.leaveType }}</td>
+                        <td>{{ leave.requestedStartDate }}</td>
+                        <td>{{ leave.requestedEndDate }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>{{ leave.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no leave records.</p>
+    {% endif %}
+</div>
+
+
+
+
+
+
+
+{% endblock %}

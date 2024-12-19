@@ -1,0 +1,85 @@
+{% include 'hearder.html' %}
+
+<script>
+    function checkpassword(){
+        if(document.signup.pwd.value!=document.signup.cpwd.value){
+            alert('password not match');
+            document.signup.cpwd.focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom:2px red solid">create an account</h5>
+        
+        <div class="container-fluid">
+            <form action="" method="post" name="signup" onsubmit="return checkpassword()">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">first name</label>
+                            <input type="text" name="firstname" class="form-control" placeholder="enter first name" pattern="[A-Za-z]+">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">last name</label>
+                            <input type="text" name="lastname" class="form-control" placeholder="enter last name" pattern="[A-Za-z]+">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">emp code</label>
+                            <input type="text" name="empcode" class="form-control" placeholder=" " pattern="[0-9]+">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">Email Id</label>
+                            <input type="email" name="email" class="form-control" placeholder="" >
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Password</label>
+                            <input type="text" name="pwd" class="form-control" placeholder="" pattern="[0-9]+">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">con Password</label>
+                            <input type="text" name="cpwd" class="form-control" placeholder="" pattern="[0-9]+">
+
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" value="submit" class="m-2 btn-primary" name="" id="">
+            </form>
+        </div>
+    
+    </div>
+
+
+
+</div>
+{% if error == "no" %}
+<script>
+    alert('Signup successfully');
+    window.location = '{% url "emp_login" %}';
+</script>
+{% elif error == "yes" %}
+<script>
+    alert('Signup not successful');
+    window.location = '{% url "registration" %}';
+</script>
+{% endif %}

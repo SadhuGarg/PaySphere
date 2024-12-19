@@ -1,0 +1,37 @@
+{% extends 'emp_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    {% if employee %}
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3>Employee Profile</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Personal Information -->
+                    <div class="col-md-6">
+                        <h5 class="text-primary">Personal Information</h5>
+                        <p><strong>Employee Code:</strong> {{ employee.emp_code }}</p>
+                        <p><strong>Full Name:</strong> {{ employee.user.first_name }} {{ employee.user.last_name }}</p>
+                        <p><strong>Gender:</strong> {{ employee.gender }}</p>
+                        <p><strong>Contact:</strong> {{ employee.contact }}</p>
+                        <p><strong>Joining Date:</strong> {{ employee.joining_date }}</p>
+                    </div>
+
+                    <!-- Work Information -->
+                    <div class="col-md-6">
+                        <h5 class="text-primary">Work Information</h5>
+                        <p><strong>Department:</strong> {{ employee.emp_dept }}</p>
+                        <p><strong>Designation:</strong> {{ employee.designation }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-danger mt-4">
+            <strong>Oops!</strong> No employee details found for your account.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

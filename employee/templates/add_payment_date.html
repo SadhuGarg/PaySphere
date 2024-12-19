@@ -1,0 +1,72 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+
+
+
+<div class="container mt-5">
+    <!-- Form for adding payment date -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="text-center">Add Payment Date for Employee</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="employee" class="form-label">Employee</label>
+                    <select id="employee" name="employee" class="form-control" required>
+                        {% for employee in employee_list %}
+                            <option value="{{ employee.employee_id }}">{{ employee.user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="payment_date" class="form-label">Payment Date</label>
+                    {{ form.payment_date }}
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Save Payment Date</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display existing payment dates -->
+    <div class="card shadow-sm mt-5">
+        <div class="card-header bg-info text-white">
+            <h3 class="text-center">Employee Payment Dates</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Employee</th>
+                        <th>Payment Date</th>
+                        <th>Actions</th> <!-- Added Actions column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payment_dates %}
+                        <tr>
+                            <td>{{ payment.employee.user.username }}</td>
+                            <td>{{ payment.payment_date|date:"F j, Y" }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'delete_payment_date' payment.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No payment dates found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

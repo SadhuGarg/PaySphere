@@ -1,0 +1,63 @@
+{% include 'hearder.html' %}
+
+<!-- <script>
+    function checkpassword(){
+        if(document.signup.pwd.value!=document.signup.cpwd.value){
+            alert('password not match');
+            document.signup.cpwd.focus();
+            return false;
+        }
+        return true;
+    }
+</script> -->
+
+<div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom:2px red solid">Employee login</h5>
+
+        <div class="container-fluid">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Email Id</label>
+                            <input type="email" name="emailid" class="form-control" placeholder="">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="enter last name">
+
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" value="Login" class="m-2 btn-primary" name="" id="">
+            </form>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+{% if error == "no" %}
+<script>
+    alert('Login successfully');
+    window.location = '{% url "employee_dashboard" %}';
+</script>
+{% elif error == "yes" %}
+<script>
+    alert('invalid login username & password');
+    window.location = '{% url "emp_login" %}';
+</script>
+{% endif %}

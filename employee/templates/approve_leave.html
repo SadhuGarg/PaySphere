@@ -1,0 +1,27 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Approve Leave Request</h3>
+        </div>
+        <div class="card-body">
+            <h4>Leave Request Details</h4>
+            <p><strong>Employee:</strong> {{ leave.employee.user.first_name }} {{ leave.employee.user.last_name }}</p>
+            <p><strong>Leave Type:</strong> {{ leave.leaveType }}</p>
+            <p><strong>Requested Dates:</strong> {{ leave.requestedStartDate }} to {{ leave.requestedEndDate }}</p>
+            <p><strong>Reason:</strong> {{ leave.reason }}</p>
+
+            <hr>
+            <h4>Approve with Custom Dates</h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Approve</button>
+                <a href="{% url 'leave_requests' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

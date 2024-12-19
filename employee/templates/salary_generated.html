@@ -1,0 +1,29 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <h2 class="text-center">Salary Generated for {{ salary_data.employee.user.get_full_name }}</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Employee Name</th>
+            <td>{{ salary_data.employee.user.get_full_name }}</td>
+        </tr>
+        <tr>
+            <th>Monthly Salary</th>
+            <td>{{ salary_data.monthly_salary }}</td>
+        </tr>
+        <tr>
+            <th>Total Leaves</th>
+            <td>{{ salary_data.total_leaves }}</td>
+        </tr>
+        <tr>
+            <th>Total Deduction</th>
+            <td>{{ salary_data.total_deduction }}</td>
+        </tr>
+        <tr>
+            <th>Final Salary</th>
+            <td>{{ salary_data.final_salary }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div class="container mt-5">
+    <h2 class="text-center">Employee Salary and Leave Details</h2>
+    <div class="card shadow p-4">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th>Monthly Salary ($)</th>
+                    <th>Total Leaves</th>
+                    <th>Total Deduction ($)</th>
+                    <th>Final Monthly Salary ($)</th>
+                    <th>Status</th> <!-- Salary credited status -->
+                </tr>
+            </thead>
+            <tbody>
+                {% if employee_data %}
+                    {% for data in employee_data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ data.employee.user.get_full_name }}</td>
+                        <td>{{ data.employee.emp_dept }}</td>
+                        <td>{{ data.monthly_salary|floatformat:2 }}</td>
+                        <td>{{ data.total_leaves }}</td>
+                        <td>{{ data.total_deduction|floatformat:2 }}</td>
+                        <td>{{ data.final_salary|floatformat:2 }}</td>
+                        <td>
+                            <span class="badge {% if data.salary_credited == 'Yes' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ data.salary_credited }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">No data available</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
