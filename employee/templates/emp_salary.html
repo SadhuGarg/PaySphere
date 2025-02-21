@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class="container mt-4">
-    <h3 class="text-center font-weight-bold">{{ request.user.username }}'s Salary Details</h3>
+    <h3 class="text-center font-weight-bold">{{ request.user.first_name }} {{ request.user.last_name }}'s Salary Details</h3>
     <table class="table table-bordered mt-4">
         <thead>
             <tr class="bg-success text-white">

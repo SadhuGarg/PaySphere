@@ -4,7 +4,7 @@
 
 <div class="card shadow-lg m-5" style="border-radius: 15px;">
     <div class="card-body">
-        <h5 class="p-3 mb-4" style="border-bottom: 2px solid #f44336; color: #052965; font-weight: bold; font-size: 24px;">Apply for Leave</h5>
+        <h5 class="p-3 mb-4" style="border-bottom: 2px solid #f44336; color: #052965; font-weight: bold; font-size: 24px;">Edit Leave Request</h5>
 
         <div class="container-fluid">
             <form action="" method="post">
@@ -16,13 +16,13 @@
                         <div class="form-group">
                             <label for="leave_type" class="font-weight-bold">Leave Type</label>
                             <select name="leave_type" class="form-control custom-select" required>
-                                <option value="" disabled selected>Select Leave Type</option>
-                                <option value="Sick Leave">Sick Leave</option>
-                                <option value="Casual Leave">Casual Leave</option>
-                                <option value="Annual Leave">Annual Leave</option>
-                                <option value="Maternity Leave">Maternity Leave</option>
-                                <option value="Paternity Leave">Paternity Leave</option>
-                                <option value="Unpaid Leave">Unpaid Leave</option>
+                                <option value="" disabled>Select Leave Type</option>
+                                <option value="Sick Leave" {% if leave.leaveType == 'Sick Leave' %}selected{% endif %}>Sick Leave</option>
+                                <option value="Casual Leave" {% if leave.leaveType == 'Casual Leave' %}selected{% endif %}>Casual Leave</option>
+                                <option value="Annual Leave" {% if leave.leaveType == 'Annual Leave' %}selected{% endif %}>Annual Leave</option>
+                                <option value="Maternity Leave" {% if leave.leaveType == 'Maternity Leave' %}selected{% endif %}>Maternity Leave</option>
+                                <option value="Paternity Leave" {% if leave.leaveType == 'Paternity Leave' %}selected{% endif %}>Paternity Leave</option>
+                                <option value="Unpaid Leave" {% if leave.leaveType == 'Unpaid Leave' %}selected{% endif %}>Unpaid Leave</option>
                             </select>
                         </div>
                     </div>
@@ -33,14 +33,14 @@
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
                             <label for="start_date" class="font-weight-bold">Start Date</label>
-                            <input type="date" name="start_date" class="form-control" required>
+                            <input type="date" name="start_date" class="form-control" value="{{ leave.requestedStartDate }}" required>
                         </div>
                     </div>
 
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
                             <label for="end_date" class="font-weight-bold">End Date</label>
-                            <input type="date" name="end_date" class="form-control" required>
+                            <input type="date" name="end_date" class="form-control" value="{{ leave.requestedEndDate }}" required>
                         </div>
                     </div>
                 </div>
@@ -50,14 +50,14 @@
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
                             <label for="reason" class="font-weight-bold">Reason (optional)</label>
-                            <textarea name="reason" class="form-control" rows="4" placeholder="Describe your reason for leave (if any)"></textarea>
+                            <textarea name="reason" class="form-control" rows="4">{{ leave.reason }}</textarea>
                         </div>
                     </div>
                 </div>
 
                 <!-- Submit Button -->
-                <div >
-                    <input type="submit" value="Apply" class="btn btn-primary btn-lg" style="border-radius: 30px; padding: 10px 30px;">
+                <div>
+                    <input type="submit" value="Update" class="btn btn-primary btn-lg" style="border-radius: 30px; padding: 10px 30px;">
                 </div>
             </form>
         </div>

@@ -57,6 +57,8 @@ urlpatterns = [
     path('add-payment-date/', add_payment_date, name='add_payment_date'),
     path('delete_payment_date/<int:payment_id>/', delete_payment_date, name='delete_payment_date'),
     path('dashboard/', employee_dashboard, name='employee_dashboard'),
+    path('dashboard1/', admin_dashboard1, name='admin_dashboard1'),
+    path('delete_leave/<int:leave_id>/', delete_leave, name='delete_leave'),
 
 
 ]

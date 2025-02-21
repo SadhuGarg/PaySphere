@@ -10,7 +10,8 @@
     {% if error == "no" %}
     <script>
         alert('Admin Login successfully');
-        window.location = '{% url "admin_home" %}';
+        window.location = '{% url "admin_dashboard1" %}';
+        //window.location = '{% url "admin_home" %}';
     </script>
     {% elif error == "yes" %}
     <script>

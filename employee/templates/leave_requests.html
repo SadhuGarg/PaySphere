@@ -8,42 +8,85 @@
         </div>
         <div class="card-body">
             <h4 class="text-center mb-4">List of Leave Requests</h4>
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Employee Name</th>
-                        <th>Leave Type</th>
-                        <th>Requested Dates</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for leave in leave_requests %}
-                    <tr>
-                        <td>{{ leave.employee.user.first_name }} {{ leave.employee.user.last_name }}</td>
-                        <td>{{ leave.leaveType }}</td>
-                        <td>{{ leave.requestedStartDate }} to {{ leave.requestedEndDate }}</td>
-                        <td>{{ leave.status }}</td>
-                        <td>
-                            {% if leave.status == "Pending" %}
-                            <a href="{% url 'approve_leave' leave.leaveId %}" class="btn btn-success btn-sm">Approve</a>
-                            <a href="{% url 'reject_leave' leave.leaveId %}" class="btn btn-danger btn-sm">Reject</a>
-                            {% else %}
-                            <span class="badge badge-secondary">{{ leave.status }}</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center">No leave requests found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                
-            </table>
-            <a href="{% url 'emp_salary' %}" class="btn btn-primary">Generate Salary</a>
+            
+            <!-- Sort Dropdown -->
+            <div style="text-align: right; margin-bottom: 10px;">
+                <label for="sortLeaves" style="font-weight: bold; margin-right: 5px;">Sort by:</label>
+                <select id="sortLeaves" style="padding: 5px; border: 1px solid #ccc;">
+                    <option value="0">Employee</option>
+                    <option value="1">Leave Type</option>
+                    <option value="2">Start Date</option>
+                    <option value="3">End Date</option>
+                    <option value="4">Status</option>
+                </select>
+            </div>
+
+            <!-- Scrollable Box for the Table -->
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-bordered table-striped" id="leavesTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Leave Type</th>
+                            <th>Requested Dates</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for leave in leave_requests %}
+                        <tr>
+                            <td>{{ leave.employee.user.first_name }} {{ leave.employee.user.last_name }}</td>
+                            <td>{{ leave.leaveType }}</td>
+                            <td>{{ leave.requestedStartDate }} to {{ leave.requestedEndDate }}</td>
+                            <td>{{ leave.status }}</td>
+                            <td>
+                                {% if leave.status == "Pending" %}
+                                <a href="{% url 'approve_leave' leave.leaveId %}" class="btn btn-success btn-sm">Approve</a>
+                                <a href="{% url 'reject_leave' leave.leaveId %}" class="btn btn-danger btn-sm">Reject</a>
+                                {% else %}
+                                <span class="badge badge-secondary" style="color: black;">{{ leave.status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No leave requests found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Sort Table Function
+    document.getElementById("sortLeaves").addEventListener("change", function () {
+        const columnIndex = this.value;
+        const table = document.getElementById("leavesTable");
+        const rows = Array.from(table.rows).slice(1);
+        const sortedRows = rows.sort((a, b) => {
+            let aText = a.cells[columnIndex].innerText.trim().toLowerCase();
+            let bText = b.cells[columnIndex].innerText.trim().toLowerCase();
+
+            // Handle dates (Start Date and End Date) sorting
+            if (columnIndex === "2" || columnIndex === "3") {
+                aText = new Date(a.cells[columnIndex].innerText);
+                bText = new Date(b.cells[columnIndex].innerText);
+                return aText - bText; // Sort dates ascending
+            }
+
+            // Default string sorting
+            return aText.localeCompare(bText);
+        });
+
+        // Clear and re-append sorted rows
+        const tbody = table.querySelector("tbody");
+        tbody.innerHTML = "";
+        sortedRows.forEach(row => tbody.appendChild(row));
+    });
+</script>
+
 {% endblock %}

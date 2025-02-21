@@ -1,1 +1,53 @@
 {% include 'hearder.html' %}
+
+<div class="container mt-5 d-flex flex-column justify-content-between min-vh-100">
+    <!-- Hero Section -->
+    <div class="jumbotron text-center bg-primary text-white py-5">
+        <h1 class="display-4">Welcome to PaySphere</h1>
+        <p class="lead">Your one-stop solution for seamless payroll management and employee services.</p>
+        <hr class="my-4">
+        <a class="btn btn-light btn-lg" href="{% url 'admin_login' %}" role="button">Get Started</a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center py-4">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Employee Login</h5>
+                    <p class="card-text">Access your dashboard and manage your profile.</p>
+                    <a href="{% url 'emp_login' %}" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Admin Portal</h5>
+                    <p class="card-text">Manage employees and payroll effortlessly.</p>
+                    <a href="{% url 'admin_login' %}" class="btn btn-primary">Admin Login</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Support</h5>
+                    <p class="card-text">Reach out to us for any assistance or inquiries.</p>
+                    <a href="#" class="btn btn-primary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="py-4 text-center">
+        <h2>About PaySphere</h2>
+        <p class="text-muted">At PaySphere, we aim to simplify payroll and employee management. With our intuitive interface and cutting-edge features, we ensure efficiency and satisfaction for both employees and administrators.</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-3 text-center">
+    &copy; 2024 PaySphere. All Rights Reserved.
+</footer>

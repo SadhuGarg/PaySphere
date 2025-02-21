@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         var employeeSelect = document.getElementById('id_employee');
         var salaryInput = document.getElementById('id_salary');
@@ -64,5 +64,46 @@
             }
         });
     });
+</script> -->
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var employeeSelect = document.getElementById('id_employee');
+        var monthlySalaryInput = document.getElementById('id_monthlySalary');
+        var annualSalaryInput = document.getElementById('id_annualSalary');
+
+        // Fetch and update the monthly salary when an employee is selected
+        employeeSelect.addEventListener('change', function() {
+            var employeeId = this.value;
+            
+            if (employeeId) {
+                // Send AJAX request to get the salary details
+                fetch('/get_salary_detail/' + employeeId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.monthlySalary) {
+                            monthlySalaryInput.value = data.monthlySalary;
+                            calculateAnnualSalary();
+                        }
+                    });
+            }
+        });
+
+        // Update the annual sala
+        //ry whenever the monthly salary changes
+        monthlySalaryInput.addEventListener('input', calculateAnnualSalary);
+
+        function calculateAnnualSalary() {
+            var monthlySalary = parseFloat(monthlySalaryInput.value);
+            if (!isNaN(monthlySalary)) {
+                annualSalaryInput.value = (monthlySalary * 12).toFixed(2); // Calculate annual salary
+            } else {
+                annualSalaryInput.value = ''; // Clear annual salary if input is invalid
+            }
+        }
+    });
 </script>
+
 {% endblock %}

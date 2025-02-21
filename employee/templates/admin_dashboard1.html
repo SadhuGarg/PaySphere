@@ -1,0 +1,150 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<div style="padding: 5px; font-family: Arial, sans-serif;">
+    <h1 style="text-align: center; margin-bottom: 20px;">Admin Dashboard</h1>
+
+    <!-- Grid Layout for Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px;">
+        <!-- Total Employees Card -->
+        <!-- <div style="background: linear-gradient(135deg, #4CAF50, #81C784); padding: 10px; border-radius: 8px; color: white; text-align: center;"> -->
+        <div style="background-color: #4158D0; background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+ padding: 10px; border-radius: 8px; color: white; text-align: center;">
+            <h3>Total Employees</h3>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0;">{{ total_employees }}</p>
+        </div>
+
+        <!-- Total Employees on Leave Card -->
+        <div style="background-color: #0093E9; background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+ padding: 10px; border-radius: 8px; color: white; text-align: center;">
+            <h3>Employees on Leave Today</h3>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0;">{{ employees_on_leave }}</p>
+        </div>
+
+        <!-- Total Leaves Card -->
+        <div style="background-color: #8EC5FC; background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+ padding: 10px; border-radius: 8px; color: white; text-align: center;">
+            <h3>Total Leaves</h3>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0;">{{ leave_stats.total_leaves }}</p>
+        </div>
+
+        <!-- Approved Leaves Card -->
+        <div style="background-color: #85FFBD; background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+ padding: 10px; border-radius: 8px; color: white; text-align: center;">
+            <h3>Approved Leaves</h3>
+            <p style="font-size: 20px; font-weight: bold; margin: 5px 0;">{{ leave_stats.approved_leaves }}</p>
+        </div>
+
+        <!-- Rejected Leaves Card -->
+        <div style="background-color: #FF9A8B; background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+ padding: 10px; border-radius: 8px; color: white; text-align: center;">
+            <h3>Rejected Leaves</h3>
+            <p style="font-size: 20px; font-weight: bold; margin: 5px 0;">{{ leave_stats.rejected_leaves }}</p>
+        </div>
+
+        <!-- Pending Leaves Card -->
+        <div style="background-color: #08AEEA; background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+ padding: 10px; border-radius: 8px; color: white; text-align: center;">
+            <h3>Pending Leaves</h3>
+            <p style="font-size: 20px; font-weight: bold; margin: 5px 0;">{{ leave_stats.pending_leaves }}</p>
+        </div>
+    </div>
+
+    <!-- Leave Chart and Table Layout -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+
+        <!-- Leave Distribution Chart -->
+        <div style="flex: 1; text-align: center;">
+            <h3 style="margin-bottom: 10px;">Leave Distribution</h3>
+            <canvas id="leavePieChart" style="max-width: 300px; max-height: 300px;"></canvas>
+        </div>
+
+        <!-- Leave Table -->
+        <div style="flex: 2;">
+            <h3 style="margin-bottom: 10px; text-align: center;">Today Leave</h3>
+
+            <!-- Sort Dropdown -->
+            <div style="text-align: right; margin-bottom: 10px;">
+                <label for="sortLeaves" style="font-weight: bold; margin-right: 5px;">Sort by:</label>
+                <select id="sortLeaves" style="padding: 5px; border: 1px solid #ccc;">
+                    <option value="0">Employee</option>
+                    <option value="1">Leave Type</option>
+                    <option value="2">Start Date</option>
+                    <option value="3">End Date</option>
+                    <option value="4">Status</option>
+                </select>
+            </div>
+
+            <table id="leavesTable" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                    <tr style="background: #f4f4f4; border-bottom: 2px solid #ddd;">
+                        <th style="padding: 8px;">Employee</th>
+                        <th style="padding: 8px;">Leave Type</th>
+                        <th style="padding: 8px;">Start Date</th>
+                        <th style="padding: 8px;">End Date</th>
+                        <th style="padding: 8px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in leaves %}
+                    <tr>
+                        <td style="padding: 8px;">{{ leave.employee.user.username }}</td>
+                        <td style="padding: 8px;">{{ leave.leaveType }}</td>
+                        <td style="padding: 8px;">{{ leave.requestedStartDate }}</td>
+                        <td style="padding: 8px;">{{ leave.requestedEndDate }}</td>
+                        <td style="padding: 8px;">{{ leave.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data preparation for pie chart
+    const leaveData = {
+        labels: ['Approved', 'Rejected', 'Pending'],
+        datasets: [{
+            label: 'Leave Distribution',
+            data: [
+                {{ leave_stats.approved_leaves|default:0 }},
+                {{ leave_stats.rejected_leaves|default:0 }},
+                {{ leave_stats.pending_leaves|default:0 }}
+            ],
+            backgroundColor: ['#FF033E', '#32de84', '#002D62'],
+        }]
+    };
+
+    // Chart configuration
+    const config = {
+        type: 'pie',
+        data: leaveData,
+    };
+
+    // Render the chart
+    const leavePieChart = new Chart(
+        document.getElementById('leavePieChart'),
+        config
+    );
+
+    // Sort Table Function
+    document.getElementById("sortLeaves").addEventListener("change", function () {
+        const columnIndex = this.value;
+        const table = document.getElementById("leavesTable");
+        const rows = Array.from(table.rows).slice(1);
+        const sortedRows = rows.sort((a, b) => {
+            const aText = a.cells[columnIndex].innerText.toLowerCase();
+            const bText = b.cells[columnIndex].innerText.toLowerCase();
+            return aText.localeCompare(bText);
+        });
+
+        // Clear and re-append sorted rows
+        const tbody = table.querySelector("tbody");
+        tbody.innerHTML = "";
+        sortedRows.forEach(row => tbody.appendChild(row));
+    });
+</script>
+{% endblock %}

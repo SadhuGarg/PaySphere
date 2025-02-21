@@ -38,31 +38,33 @@
                 <div class="card-body">
                     <h4 class="card-title">Your Current Leaves</h4>
                     {% if current_leaves %}
-                        <table class="table table-sm table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for leave in current_leaves %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ leave.leaveType }}</td>
-                                    <td>
-                                        <span class="badge 
-                                            {% if leave.status == 'Approved' %}bg-success
-                                            {% elif leave.status == 'Pending' %}bg-warning text-dark
-                                            {% else %}bg-danger{% endif %}">
-                                            {{ leave.status }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div style="max-height: 300px; overflow-y: auto;"> <!-- Added Scrollable Container -->
+                            <table class="table table-sm table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for leave in current_leaves %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ leave.leaveType }}</td>
+                                        <td>
+                                            <span class="badge 
+                                                {% if leave.status == 'Approved' %}bg-success
+                                                {% elif leave.status == 'Pending' %}bg-warning text-dark
+                                                {% else %}bg-danger{% endif %}">
+                                                {{ leave.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% else %}
                         <p class="text-muted">No leave records available.</p>
                     {% endif %}

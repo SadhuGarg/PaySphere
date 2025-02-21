@@ -93,6 +93,31 @@ def emp_leave (request):
 
     return render(request, 'emp_leave.html')  # Show the leave application form
 
+# @login_required
+# def emp_leave_history(request):
+#     try:
+#         # Get the EmployeeDetail instance for the logged-in user
+#         employee_detail = EmployeeDetail.objects.get(user=request.user)
+#     except EmployeeDetail.DoesNotExist:
+#         # Handle the case where the employee detail doesn't exist for the logged-in user
+#         employee_detail = None
+
+#     if employee_detail:
+#         # Fetch the employee's applied leaves
+#         applied_leaves = Leave.objects.filter(employee=employee_detail)  # Now filtering by employee_detail
+#     else:
+#         applied_leaves = []
+
+#     context = {
+#         'applied_leaves': applied_leaves
+#     }
+
+#     return render(request, 'emp_leave_history.html', context)
+
+
+
+
+
 @login_required
 def emp_leave_history(request):
     try:
@@ -103,8 +128,8 @@ def emp_leave_history(request):
         employee_detail = None
 
     if employee_detail:
-        # Fetch the employee's applied leaves
-        applied_leaves = Leave.objects.filter(employee=employee_detail)  # Now filtering by employee_detail
+        # Fetch the employee's applied leaves, sorted by start date (descending)
+        applied_leaves = Leave.objects.filter(employee=employee_detail).order_by('-requestedStartDate')
     else:
         applied_leaves = []
 
@@ -113,6 +138,11 @@ def emp_leave_history(request):
     }
 
     return render(request, 'emp_leave_history.html', context)
+
+
+
+
+
 
 
 @login_required
@@ -216,15 +246,25 @@ def create_emp(request):
 @login_required
 def Logout(request):
     logout(request)
-    return redirect('emp_login')  
+    return redirect('index')  
+    # return redirect('emp_login')  
 
 
+
+# def leave_requests(request):
+#     if not request.user.is_staff:
+#         return redirect('admin_login')  # Redirect if user is not admin
+    
+#     leave_requests = Leave.objects.all().order_by('-requestedStartDate')  # Ensure all leaves are fetched
+    
+#     return render(request, 'leave_requests.html', {'leave_requests': leave_requests})
 
 def leave_requests(request):
     if not request.user.is_staff:
         return redirect('admin_login')  # Redirect if user is not admin
     
-    leave_requests = Leave.objects.all().order_by('-requestedStartDate')  # Ensure all leaves are fetched
+    sort_by = request.GET.get('sort_by', 'requestedStartDate')  # Default sorting by start date
+    leave_requests = Leave.objects.all().order_by(sort_by)
     
     return render(request, 'leave_requests.html', {'leave_requests': leave_requests})
 
@@ -780,42 +820,6 @@ def delete_payment_date(request, payment_id):
 
 
 
-
-
-
-
-
-# from django.shortcuts import render
-# from django.contrib.auth.decorators import login_required
-# from .models import EmployeeDetail, Leave
-
-# @login_required
-# def employee_dashboard(request):
-#     # Get the logged-in user
-#     user = request.user
-    
-#     try:
-#         # Get employee details for the logged-in user
-#         employee = EmployeeDetail.objects.get(user=user)
-        
-#         # Get the leaves for the employee
-#         current_leaves = Leave.objects.filter(employee=employee).order_by('-requestedStartDate')  # Ordered by latest
-        
-#     except EmployeeDetail.DoesNotExist:
-#         employee = None
-#         current_leaves = None
-
-#     context = {
-#         'employee': employee,
-#         'current_leaves': current_leaves,
-#     }
-    
-#     return render(request, 'employee_dashboard.html', context)
-
-
-
-
-
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import EmployeeDetail, Leave
@@ -846,5 +850,59 @@ def employee_dashboard(request):
         'leave_data': leave_data,
     }
     return render(request, 'employee_dashboard.html', context)
+
+
+
+
+
+from django.shortcuts import render
+from django.db.models import Count, Q
+from datetime import datetime
+from .models import EmployeeDetail, Leave
+
+
+
+from django.shortcuts import render
+from django.utils import timezone
+from .models import Leave, EmployeeDetail
+
+def admin_dashboard1(request):
+    total_employees = EmployeeDetail.objects.count()
+
+    leave_stats = {
+        'total_leaves': Leave.objects.count(),
+        'approved_leaves': Leave.objects.filter(status='Approved').count(),
+        'rejected_leaves': Leave.objects.filter(status='Rejected').count(),
+        'pending_leaves': Leave.objects.filter(status='Pending').count(),
+    }
+
+    # Get today's date
+    today = timezone.now().date()
+
+    # Fetch leave records for today (including overlapping leaves)
+    leaves = Leave.objects.filter(requestedStartDate__lte=today, requestedEndDate__gte=today)
+
+    # Calculate total employees on leave today by counting distinct employees
+    employees_on_leave = leaves.values('employee').distinct().count()
+
+    return render(request, 'admin_dashboard1.html', {
+        'total_employees': total_employees,
+        'leave_stats': leave_stats,
+        'leaves': leaves,
+        'employees_on_leave': employees_on_leave,
+    })
+
+
+
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib import messages
+from .models import Leave
+
+def delete_leave(request, leave_id):
+    if request.method == "POST":
+        leave = get_object_or_404(Leave, pk=leave_id)
+        leave.delete()
+        messages.success(request, "Leave request deleted successfully!")
+        return redirect('emp_leave_history')  # Replace 'leave_history' with your leave history page name
 
 

@@ -1,83 +1,80 @@
 {% extends 'admin_base.html' %}
 
 {% block main %}
-
-
 <script>
-    function checkpassword(){
-        if(document.signup.pwd.value!=document.signup.cpwd.value){
-            alert('password not match');
+    function checkpassword() {
+        if (document.signup.pwd.value != document.signup.cpwd.value) {
+            alert('Password does not match');
             document.signup.cpwd.focus();
             return false;
         }
         return true;
     }
-</script> 
+</script>
 
- <div class="card shadow m-5">
+<div class="card shadow-lg m-5">
     <div class="card-body">
-        <h5 class="p-2" style="border-bottom:2px red solid">create an account</h5>
-        
-        <div class="container-fluid">
+        <h5 class="p-3 text-center text-white" style="background-color: #052965; border-bottom: 2px solid red;">Create an Account</h5>
+
+        <div class="container-fluid mt-4">
             <form action="" method="post" name="signup" onsubmit="return checkpassword()">
                 {% csrf_token %}
+                
                 <div class="form-row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12 mb-3">
                         <div class="form-group">
-                            <label for="">first name</label>
-                            <input type="text" name="firstname" class="form-control" placeholder="enter first name" pattern="[A-Za-z]+">
-
+                            <label for="firstname">First Name</label>
+                            <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Enter first name" pattern="[A-Za-z]+" required>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    
+                    <div class="col-sm-12 mb-3">
                         <div class="form-group">
-                            <label for="">last name</label>
-                            <input type="text" name="lastname" class="form-control" placeholder="enter last name" >
-
+                            <label for="lastname">Last Name</label>
+                            <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Enter last name" required>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    
+                    <div class="col-sm-12 mb-3">
                         <div class="form-group">
-                            <label for="">emp code</label>
-                            <input type="text" name="empcode" class="form-control" placeholder=" " pattern="[0-9]+">
-
+                            <label for="empcode">Employee Code</label>
+                            <input type="text" name="empcode" class="form-control" id="empcode" placeholder="Enter employee code" pattern="[0-9]+" required>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    
+                    <div class="col-sm-12 mb-3">
                         <div class="form-group">
-                            <label for="">Email Id</label>
-                            <input type="email" name="email" class="form-control" placeholder="" >
-
+                            <label for="email">Email Address</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    
+                    <div class="col-sm-12 mb-3">
                         <div class="form-group">
-                            <label for="">Password</label>
-                            <input type="text" name="pwd" class="form-control" placeholder="" pattern="[0-9]+">
-
+                            <label for="pwd">Password</label>
+                            <input type="password" name="pwd" class="form-control" id="pwd" placeholder="Enter your password" pattern="[A-Za-z0-9]+" required>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    
+                    <div class="col-sm-12 mb-3">
                         <div class="form-group">
-                            <label for="">con Password</label>
-                            <input type="text" name="cpwd" class="form-control" placeholder="" pattern="[0-9]+">
-
+                            <label for="cpwd">Confirm Password</label>
+                            <input type="password" name="cpwd" class="form-control" id="cpwd" placeholder="Confirm your password" pattern="[A-Za-z0-9]+" required>
                         </div>
                     </div>
                 </div>
 
-                <input type="submit" value="submit" class="m-2 btn-primary" name="" id="">
+                <div class="form-group text-center">
+                    <input type="submit" value="Submit" class="btn btn-primary btn-lg px-4" id="">
+                </div>
             </form>
         </div>
-    
     </div>
-
-
-
 </div>
+
 {% if error == "no" %}
 <script>
-    alert('Signup successfully');
+    alert('Signup successful');
 </script>
 {% elif error == "yes" %}
 <script>
@@ -86,7 +83,3 @@
 {% endif %}
 
 {% endblock %}
-
-
-<!-- window.location = '{% url "emp_login" %}'; -->
-<!-- window.location = '{% url "registration" %}'; -->
